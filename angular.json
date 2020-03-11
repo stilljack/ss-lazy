@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "ss-lazy-eval": {
@@ -24,6 +24,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -119,6 +120,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "ss-lazy-eval"
+    }
+  },
+  "defaultProject": "ss-lazy-eval",
+  "cli": {
+    "analytics": "12cb9624-8e0d-481a-a8c4-e097385e78c0"
+  }
 }
