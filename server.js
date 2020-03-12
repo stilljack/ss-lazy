@@ -9,10 +9,10 @@ const app = express();
 const path = require('path')
 // Run the app by serving the static files
 // in the dist directory
-const app_path = "dist/ss-lazy-eval"
+const app_path = "./dist/ss-lazy-eval"
 
 
-app.listen(3000);
+// app.listen(port);
 app.use(express.static(path.join(__dirname,app_path)))
   .listen(port,()=>console.log(`listening on ${port}`));
 
