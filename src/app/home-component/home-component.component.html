@@ -1,0 +1,35 @@
+<p>home-component works!</p>
+<h1>
+  h1
+</h1>
+<!--<span class="sauce" [innerHtml]="blogs.pop().content"></span>-->
+<button>button normal</button>
+<p><mat-button-toggle>mat button toggle</mat-button-toggle></p>
+<p><button mat-raised-button>mat button</button></p>
+<p></p>
+
+<!-- <div ng-bind-html="blogs.pop().content"></div>-->
+<!--<div [innerHTML]="blogs.pop().content">-->
+<!--{{blogs.pop().content}}</div>-->
+
+  <mat-expansion-panel class="blog_panel_total">
+    <mat-expansion-panel-header  class="blog_panel_header">
+      <mat-panel-title class="blog_panel_title">
+        {{title}}    <span class="title-spacer"></span>{{date}}
+      </mat-panel-title>
+
+      <mat-panel-description class="blog_panel_date">
+        <span class="title-spacer"></span>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    ////
+    <p>
+  {{ loremLong}}
+    </p>
+
+
+  </mat-expansion-panel>
+
+
+<button mat-fab>fab button</button>
