@@ -10,7 +10,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --aot -prod"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +19,7 @@
     "@angular/cdk": "^9.1.1",
     "@angular/common": "~9.0.5",
     "@angular/compiler": "~9.0.5",
+    "@angular/cli": "~9.0.5",
     "@angular/core": "~9.0.5",
     "@angular/forms": "~9.0.5",
     "@angular/material": "^9.1.1",
