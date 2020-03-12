@@ -1,6 +1,9 @@
 {
   "name": "ss-lazy-eval",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "engines": {
+    "node": "12.16.x"
+  },
   "scripts": {
     "ng": "ng",
     "start": "nodemon server.js ",
@@ -9,6 +12,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+
+
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.0.5",
