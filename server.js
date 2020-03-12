@@ -11,18 +11,13 @@ const path = require('path')
 // in the dist directory
 const app_path = "./dist/ss-lazy-eval"
 
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/dist/ss-lazy-eval'));
 
-// app.listen(port);
-app.use(express.static(path.join(__dirname,app_path)))
-  .listen(port,()=>console.log(`listening on ${port}`));
+app.get('/*', function(req,res) {
 
-
+res.sendFile(path.join(__dirname+'/dist/ss-lazy-eval/index.html'));
+});
 
 // Start the app by listening on the default Heroku port
-
-//
-
-//
-// app.listen(port, function() {
-//     console.log('server running on localhost:' + port);
-// });
+app.listen(process.env.PORT || 8080);
