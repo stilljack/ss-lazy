@@ -13,11 +13,11 @@ const app_path = "dist/ss-lazy-eval"
 
 app.use('/', express.static(path.join(__dirname,app_path)))
   .get('*',(req, res)=>restore.sendfile(path.join(__dirname,app_path,
-    +"index.html")))
+    "index.html")))
   .listen(port,()=>console.log(`listening on ${port}`));
 // Start the app by listening on the default
 // // Heroku port
-// app.listen(process.env.PORT || port);
+// app.listen(process.env.PORT || port);git addd
 // app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'dist/ss-lazy/eval/index.html'));
 // });

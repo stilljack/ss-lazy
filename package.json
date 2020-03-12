@@ -6,7 +6,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "node server.js ",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -17,9 +17,9 @@
   "dependencies": {
     "@angular/animations": "~9.0.5",
     "@angular/cdk": "^9.1.1",
+    "@angular/cli": "~9.0.5",
     "@angular/common": "~9.0.5",
     "@angular/compiler": "~9.0.5",
-    "@angular/cli": "~9.0.5",
     "@angular/core": "~9.0.5",
     "@angular/forms": "~9.0.5",
     "@angular/material": "^9.1.1",
