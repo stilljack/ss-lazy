@@ -113,7 +113,7 @@ async load () { // We need to wrap the loop into an async function for this to w
     this.cx.arc(ball.x, ball.y, ball.size, 0, 2 * Math.PI);
     this.cx.lineWidth = 5;
     this.cx.fillStyle = ball.color;
-    this.cx.fill();
+    //this.cx.fill();
     this.cx.stroke();
 
 

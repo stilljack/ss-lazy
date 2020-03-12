@@ -1,7 +1,7 @@
 
 <ng-template ngFor let-parent [ngForOf]="blogs">
 
-  <mat-expansion-panel class="blog_panel_total">
+  <mat-expansion-panel class="blog_panel_total"  >
     <mat-expansion-panel-header  class="blog_panel_header">
       <mat-panel-title class="blog_panel_title">
         {{parent.title}}    <span class="title-spacer"></span>
@@ -13,6 +13,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     ////
+
     <p *ngFor="let string of parent.content" [innerHTML]="string">
       <!--  each element of blog comes back piece by piece so you can contextually format a bit easier-->
       {{ string }}
