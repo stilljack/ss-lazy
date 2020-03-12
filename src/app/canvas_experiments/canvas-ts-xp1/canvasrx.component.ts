@@ -1,97 +1,136 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {fromEvent, Observable, Subscription} from 'rxjs';
-import {pairwise, switchMap, takeUntil} from 'rxjs/operators';
+import {NONE_TYPE} from "@angular/compiler";
 
 @Component({
   selector: 'app-canvas',
   template: '<canvas #canvas></canvas>',
-  styles: ['canvas { border: 1px solid #000; }']
+  styles: ['canvas { border: 2px solid #000;alignment: center;}']
 })
 export class CanvasrxComponent implements AfterViewInit, OnInit {
 
   @ViewChild('canvas') public canvas: ElementRef;
-  @Input() public width = parent.outerWidth ;
+  @Input() public width = parent.innerWidth ;
   @Input() public height = parent.innerHeight;
-
+  private ourArray: Array<Balls> = [];
   private cx: CanvasRenderingContext2D;
   resizeObservable$: Observable<Event>;
   resizeSubscription$: Subscription;
   public ngAfterViewInit() {
-
     let canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.cx = canvasEl.getContext('2d');
-
-    canvasEl.width = parent.outerWidth / 2;
-    canvasEl.height = parent.innerHeight / 2;
+    canvasEl.width = Math.ceil(parent.outerWidth / 1.2);
+    canvasEl.height = parent.innerHeight / 1.2;
+    this.width = canvasEl.width;
+    this.height =  canvasEl.height;
     console.log(canvasEl.width + 'canvas width');
-    this.cx.lineWidth = 4;
+    this.buildOutBalls();
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = '#000';
-    this.captureEvents(canvasEl);
+    this.load().then(r => NONE_TYPE );
   }
+private timer(ms) {
+ return new Promise(res => setTimeout(res, ms));
+}
 
-  private captureEvents(canvasEl: HTMLCanvasElement) {
-    // this will capture all mousedown events from the canvas element
-    fromEvent(canvasEl, 'mousedown')
-      .pipe(
-        switchMap((e) => {
-          // after a mouse down, we'll record all mouse moves
-          return fromEvent(canvasEl, 'mousemove')
-            .pipe(
-              // we'll stop (and unsubscribe) once the user releases the mouse
-              // this will trigger a 'mouseup' event
-              takeUntil(fromEvent(canvasEl, 'mouseup')),
-              // we'll also stop (and unsubscribe) once the mouse leaves the canvas (mouseleave event)
-              takeUntil(fromEvent(canvasEl, 'mouseleave')),
-              // pairwise lets us get the previous value to draw a line from
-              // the previous point to the current point
-              pairwise()
-            );
-        })
-      )
-      .subscribe((res: [MouseEvent, MouseEvent]) => {
-        const rect = canvasEl.getBoundingClientRect();
-
-        // previous and current position with the offset
-        const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
-        };
-
-        const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
-        };
-
-        // this method we'll implement soon to do the actual drawing
-        this.drawOnCanvas(prevPos, currentPos);
-      });
+async load () { // We need to wrap the loop into an async function for this to work
+  for (let i = 0; i < 100000; i++) {
+    this.stepDraw();
+    await this.timer(3); // then the created Promise can be awaited
   }
+}
   private getRandomColor() {
     var color = Math.floor(0x1000000 * Math.random()).toString(16);
     return '#' + ('000000' + color).slice(-6);
   }
-  private drawOnCanvas(prevPos: { x: number, y: number }, currentPos: { x: number, y: number }) {
-    if (!this.cx) { return; }
-
-    this.cx.beginPath();
-
-    if (prevPos) {
-      this.cx.strokeStyle = this.getRandomColor();
-      this.cx.ellipse(prevPos.x, prevPos.y, currentPos.x, currentPos.y, 30, 15 , 45, false);
-      this.cx.moveTo(prevPos.x, prevPos.y); // from
-      this.cx.lineTo(currentPos.x, currentPos.y);
-      this.cx.stroke();
-    }
+  private stepDraw() {
+    this.ourArray.forEach( value => {
+      this.mutateBalls(value);
+    });
   }
 
-  private buildOutBalls() {
-    this.width
+  private randomInt(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  private withInX() {
+    let min = Math.ceil(0);
+    let max = Math.floor(this.width);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  private withinY(){
+    let min = Math.ceil(0);
+    let max = Math.floor(this.height);
+    return Math.floor(Math.random() * (max - min)) + min;
+
+  }
+  private ballSize() {
+    let min = Math.ceil(0);
+    let max = Math.floor(this.height) / 6;
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  private makeBall(){
+    let ball = new Balls(this.withInX(), this.withinY(), this.ballSize(), this.getRandomColor());
+    this.ourArray.push(
+      ball
+    );
+  }
+  public buildOutBalls() {
+    for (let i = 0; i < 100; i++){
+      this.makeBall();
+    }
+    this.ourArray.forEach(value => {
+      this.drawBalls(value);
+    });
+  }
+  private removeBall(ball){
+    this.ourArray.forEach( (item, index) => {
+      if (item === ball) {this.ourArray.splice(index, 1 )};
+    });
+  }
+
+  private mutateBalls(ball:Balls) {
+    if (!this.cx) { return; }
+    let max = 3;
+    let min =-3;
+    ball.x = ball.x + Math.floor(Math.random() * (max - min)) + min;
+    ball.y = ball.y + Math.floor(Math.random() * (max - min)) + min;
+    ball.size = ball.size + Math.floor(Math.random() * (max - min)) + min;
+    if (ball.size <=  0) {
+      this.removeBall(ball);
+      if (this.randomInt(0, 4) > 3) {
+        this.makeBall();
+      }
+      if (this.ourArray.length <= 5){
+        for (let i = 0; i < this.randomInt(0, 5); i++){
+          this.makeBall();
+        }
+      }
+      return;
+    }
+    ball.color= this.getRandomColor();
+    this.cx.beginPath();
+    this.cx.strokeStyle = ball.color
+    this.cx.arc(ball.x, ball.y, ball.size, 0, 2 * Math.PI);
+    this.cx.lineWidth = 5;
+    this.cx.fillStyle = ball.color;
+    this.cx.fill();
+    this.cx.stroke();
 
 
+  }
+  private drawBalls(ball: Balls) {
+    if (!this.cx) { return; }
+    this.cx.beginPath();
+    this.cx.strokeStyle = ball.color
+    this.cx.arc(ball.x, ball.y, ball.size, 0, 2 * Math.PI);
+    this.cx.lineWidth = 5;
+    this.cx.fillStyle = ball.color;
+    this.cx.fill();
+    this.cx.stroke();
   }
 
   ngOnInit(): void {
+
     this.resizeObservable$ = fromEvent(window, 'resize');
     this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
       console.log('event: ', evt);
@@ -101,3 +140,53 @@ export class CanvasrxComponent implements AfterViewInit, OnInit {
 }
 
 
+
+class Balls {
+  get x(): number {
+    return this._x;
+  }
+
+  set x(value: number) {
+    this._x = value;
+  }
+
+  get y(): number {
+    return this._y;
+  }
+
+  set y(value: number) {
+    this._y = value;
+  }
+
+  get size(): number {
+    return this._size;
+  }
+
+  set size(value: number) {
+    this._size = value;
+  }
+
+  get color(): string {
+    return this._color;
+  }
+
+  set color(value: string) {
+    this._color = value;
+  }
+  private _x: number;
+  private _y: number;
+  private _size: number;
+  private _color: string;
+  constructor(x , y, size, color) {
+    this._x = x;
+    this._y =y;
+    this._size = size,
+      this._color = color
+  }
+}
+interface Balls {
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+}
