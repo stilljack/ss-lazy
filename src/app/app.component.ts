@@ -9,5 +9,5 @@ import {Blogs} from 'Global';
 })
 
 export class AppComponent {
-  title = 'ss-lazy-eval';
+
 }

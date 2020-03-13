@@ -28,6 +28,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { CodeZooComponent } from './code-zoo/code-zoo.component';
 import {CanvasrxComponent} from './canvas_experiments/canvas-ts-xp1/canvasrx.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { Canvas2Component } from './canvas_experiments/canvas2/canvas2.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FourofourComponent,
     AboutMeComponent,
     CodeZooComponent,
-    CanvasrxComponent
+    CanvasrxComponent,
+    Canvas2Component
   ],
   imports: [
     BrowserModule,
