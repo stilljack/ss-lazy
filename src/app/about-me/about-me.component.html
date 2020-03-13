@@ -1,57 +1,253 @@
 
+<div id="flexcontainer" fxLayout="row"
+     fxLayout.xs="column"
+     fxFlexFill
+     fxLayoutGap="8px"
+     fxLayoutAlign="center center">
 
-<mat-grid-list cols="2" rowHeight="300px" >
+  <mat-card class="flexitem one">
+    <img mat-card-lg-image src="assets/images/me.jpg">
+    <mat-card-title>That's me! Jack Seymour!</mat-card-title>
+    <mat-card-subtitle>Level 1337 coder</mat-card-subtitle>
+    <mat-card-content>
+      <h4>Hey!</h4><p> Thanks for being interested in me!</p>
+      <p>At the end of 2018, I decided to stop dicking around and start coding.
+        I have been studying and refining my skills since. I have spent the most time
+        programming in kotlin, however as my interests have expanded beyond android native programming,
+        I find myself often working in typescript, python or whatever fits the problem domain the best. </p>
+      <p>The cards around this one have more info about me and
+        my polyglot interests.</p>
+    </mat-card-content>
+  </mat-card>
 
-  <mat-grid-tile colspan="1" rowspan="2">
-     <mat-grid-tile-footer>you can find my cv here:</mat-grid-tile-footer>
-    <mat-card>
-      <img mat-card-lg-image src="assets/images/me.jpg">
-      <mat-card-title>That's me! Jack Seymour!</mat-card-title>
-      <mat-card-subtitle>Level 1337 coder</mat-card-subtitle>
+  <mat-card  class="flexitem two">
+    <mat-card-title>Android</mat-card-title>
+    <img mat-card-sm-image src="assets/images/androidsvg.svg">
+
+    <mat-card-subtitle>Kotlin first, Java literate</mat-card-subtitle>
+    <mat-card-content>
+      <h4>Native code is worth it</h4>
+      <p> I spent four months while attending Lambda School
+        studying android devel in Kotlin with an emphasis
+        on gaining Java literacy due to massive Java ecosystem. </mat-card-content>
+  </mat-card>
+  <mat-card class="flexitem three">
+    <mat-card-title>Python</mat-card-title>
+    <img mat-card-sm-image src="assets/images/Python-logo-notext.svg">
+    <mat-card-subtitle>At least it's not perl</mat-card-subtitle>
+    <mat-card-content>
+      <h4>How can i prototype this the fastest?</h4>
+      <p> Python is definitely a fun and useful tool. I've had a great time using it to learn design patterns, data structures, and how to automate tinder.</p> </mat-card-content>
+  </mat-card>
+  <div>
+    <mat-card style="alignment: bottom">
+      <mat-card-title>
+        <button mat-raised-button color="primary"  (click)="onClickCV()">CV.</button>
+      </mat-card-title>
       <mat-card-content>
-        <h4>Hey!</h4><p> Thanks for being interested in me!</p>
-        <p>At the end of 2018, I decided to stop dicking around and start coding.
-          I have been studying and refining my skills since. I have spent the most time
-          programming in kotlin, however as my interests have expanded beyond android native programming,
-          I find myself often working in typescript, python or whatever fits the problem domain the best. </p>
-        <p>The cards around this one have more info about me and
-          my polyglot interests.</p>
+        Here's a more traditional CV for me.
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="flexitem four">
+      <mat-card-title><h1>Spring Boot
+        + Kotlin</h1></mat-card-title>
+      <img src="assets/images/kotlin-springboot1.png" width="200px">
+      <mat-card-subtitle>Quick to spin up, maintainable.</mat-card-subtitle>
+      <mat-card-content>
+        <p> Getting django Restful services online was perhaps a bit faster
+          initially, but I've had more luck with spring and I appreciate the
+          dependency injection which helps avoid the worst of OO hell.</p>
+
       </mat-card-content>
 
     </mat-card>
-
-  </mat-grid-tile>
-
-  <mat-grid-tile colspan="1" rowspan="1">
-    <mat-card>
-      <mat-card-title>Android</mat-card-title>
-      <img mat-card-sm-image src="assets/images/androidsvg.svg">
-      <mat-card-subtitle>Kotlin first, Java literate</mat-card-subtitle>
-      <mat-card-content>
-        <h4>Native code is worth it</h4>
-        <p> I spent four months while attending Lambda School
-          studying android devel in Kotlin with an emphasis
-          on gaining Java literacy due to massive Java ecosystem. </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-
-  <mat-grid-tile colspan="1" rowspan="1">
-    <mat-card>
-      <mat-card-title>Android</mat-card-title>
-      <img mat-card-sm-image src="assets/images/androidsvg.svg">
-      <mat-card-subtitle>Kotlin first, Java literate</mat-card-subtitle>
-      <mat-card-content>
-        <h4>Native code is worth it</h4>
-        <p> I spent four months while attending Lambda School
-          studying android devel in Kotlin with an emphasis
-          on gaining Java literacy due to massive Java ecosystem. </mat-card-content>
-    </mat-card>
-
-  </mat-grid-tile>
+  </div>
+  <mat-card class="flexitem five">
+    <mat-card-title>Angular</mat-card-title>
+    <img mat-card-sm-image src="assets/images/angular-icon.svg">
+    <mat-card-subtitle>Because of typescript.</mat-card-subtitle>
+    <mat-card-content>
+      <h4>React looks great but Typescript has types.</h4>
+      <p> Angular has been a really welcoming, easy experience and typescript feels a bit more like what I'm used to with kotlin (i.e. closer to strong static typing than vanilla JS). This site is made in Angular 9.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
 
 
 
-</mat-grid-list>
+
+<!--<div  fxLayout="row"-->
+<!--      fxLayout.xs="column"-->
+<!--      fxFlexFill-->
+<!--      fxLayoutGap="8px"-->
+<!--      fxLayoutAlign="center center"-->
+<!--&gt;-->
+
+<!--  <mat-card  fxFlex="50" >-->
+<!--    <img mat-card-lg-image src="assets/images/me.jpg">-->
+<!--    <mat-card-title>That's me! Jack Seymour!</mat-card-title>-->
+<!--    <mat-card-subtitle>Level 1337 coder</mat-card-subtitle>-->
+<!--    <mat-card-content>-->
+<!--      <h4>Hey!</h4><p> Thanks for being interested in me!</p>-->
+<!--      <p>At the end of 2018, I decided to stop dicking around and start coding.-->
+<!--        I have been studying and refining my skills since. I have spent the most time-->
+<!--        programming in kotlin, however as my interests have expanded beyond android native programming,-->
+<!--        I find myself often working in typescript, python or whatever fits the problem domain the best. </p>-->
+<!--      <p>The cards around this one have more info about me and-->
+<!--        my polyglot interests.</p>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+
+<!--  <mat-card  fxFlex="35">-->
+<!--    <mat-card-title>Android</mat-card-title>-->
+<!--    <img mat-card-sm-image src="assets/images/androidsvg.svg">-->
+
+<!--    <mat-card-subtitle>Kotlin first, Java literate</mat-card-subtitle>-->
+<!--    <mat-card-content>-->
+<!--      <h4>Native code is worth it</h4>-->
+<!--      <p> I spent four months while attending Lambda School-->
+<!--        studying android devel in Kotlin with an emphasis-->
+<!--        on gaining Java literacy due to massive Java ecosystem. </mat-card-content>-->
+<!--  </mat-card>-->
+
+<!--  <mat-card fxFlex="35">-->
+<!--    <mat-card-title>Python</mat-card-title>-->
+<!--    <img mat-card-sm-image src="assets/images/Python-logo-notext.svg">-->
+<!--    <mat-card-subtitle>At least it's not perl</mat-card-subtitle>-->
+<!--    <mat-card-content>-->
+<!--      <h4>How can i prototype this the fastest?</h4>-->
+<!--      <p> Python is definitely a fun and useful tool. I've had a great time using it to learn design patterns, data structures, and how to automate tinder.</p> </mat-card-content>-->
+<!--  </mat-card>-->
+<!--</div>-->
+<!--<div  fxLayout="row"-->
+<!--      fxLayout.xs="column"-->
+<!--      fxFlexFill-->
+<!--      fxLayoutGap="8px"-->
+<!--      fxLayoutAlign="center center"-->
+<!--&gt;-->
+<!--  <mat-card fxFlex="35">-->
+<!--    <mat-card-title><h1>Spring Boot-->
+<!--      + Kotlin</h1></mat-card-title>-->
+<!--    <img src="assets/images/kotlin-springboot1.png" width="200px">-->
+<!--    <mat-card-subtitle>Quick to spin up, maintainable.</mat-card-subtitle>-->
+<!--    <mat-card-content>-->
+<!--      <p> Getting django Restful services online was perhaps a bit faster-->
+<!--        initially, but I've had more luck with spring and I appreciate the-->
+<!--        dependency injection which helps avoids the worst of OO hell.</p>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+
+
+<!--  <mat-card fxFlex="35">-->
+<!--    <mat-card-title>Angular</mat-card-title>-->
+<!--    <img mat-card-sm-image src="assets/images/angular-icon.svg">-->
+<!--    <mat-card-subtitle>Because of typescript.</mat-card-subtitle>-->
+<!--    <mat-card-content>-->
+<!--      <h4>React looks great but Typescript has types.</h4>-->
+<!--      <p> Angular has been a really welcoming, easy experience and typescript feels a bit more like what I'm used to with kotlin (i.e. closer to strong static typing than vanilla JS). This site is made in Angular 9.-->
+<!--      </p>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+
+<!--  <mat-card fxFlex="10">-->
+<!--    <mat-card-title>-->
+<!--      <button mat-raised-button color="primary"  (click)="onClickCV()">CV.</button>-->
+<!--    </mat-card-title>-->
+<!--    <mat-card-content>-->
+<!--      Here's a more traditional CV for me.-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+<!--</div>-->
+
+
+
+<!--<mat-grid-list cols="3" rowHeight="110px"  >-->
+<!--  <mat-grid-tile colspan="1" rowspan="7">-->
+<!--    <mat-card>-->
+<!--      <img mat-card-lg-image src="assets/images/me.jpg">-->
+<!--      <mat-card-title>That's me! Jack Seymour!</mat-card-title>-->
+<!--      <mat-card-subtitle>Level 1337 coder</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <h4>Hey!</h4><p> Thanks for being interested in me!</p>-->
+<!--        <p>At the end of 2018, I decided to stop dicking around and start coding.-->
+<!--          I have been studying and refining my skills since. I have spent the most time-->
+<!--          programming in kotlin, however as my interests have expanded beyond android native programming,-->
+<!--          I find myself often working in typescript, python or whatever fits the problem domain the best. </p>-->
+<!--        <p>The cards around this one have more info about me and-->
+<!--          my polyglot interests.</p>-->
+<!--      </mat-card-content>-->
+
+<!--    </mat-card>-->
+
+<!--  </mat-grid-tile>-->
+
+<!--  <mat-grid-tile colspan="1" rowspan="4">-->
+<!--    <mat-card>-->
+<!--      <mat-card-title>Android</mat-card-title>-->
+<!--      <img mat-card-sm-image src="assets/images/androidsvg.svg">-->
+
+<!--      <mat-card-subtitle>Kotlin first, Java literate</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <h4>Native code is worth it</h4>-->
+<!--        <p> I spent four months while attending Lambda School-->
+<!--          studying android devel in Kotlin with an emphasis-->
+<!--          on gaining Java literacy due to massive Java ecosystem. </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </mat-grid-tile>-->
+
+<!--  <mat-grid-tile colspan="1" rowspan="4">-->
+<!--    <mat-card>-->
+<!--      <mat-card-title>Python</mat-card-title>-->
+<!--      <img mat-card-sm-image src="assets/images/Python-logo-notext.svg">-->
+<!--      <mat-card-subtitle>At least it's not perl</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <h4>How can i prototype this the fastest?</h4>-->
+<!--        <p> Python is definitely a fun and useful tool. I've had a great time using it to learn design patterns, data structures, and how to automate tinder.</p> </mat-card-content>-->
+<!--    </mat-card>-->
+
+
+<!--  </mat-grid-tile>-->
+<!--  <mat-grid-tile colspan="2" rowspan="3">-->
+<!--    <mat-card>-->
+<!--      <mat-card-title><h1>Spring Boot-->
+<!--        + Kotlin</h1></mat-card-title>-->
+<!--      <img src="assets/images/kotlin-springboot1.png" width="200px">-->
+<!--      <mat-card-subtitle>Quick to spin up, maintainable.</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <p> Getting django Restful services online was perhaps a bit faster-->
+<!--          initially, but I've had more luck with spring and I appreciate the-->
+<!--          dependency injection which helps avoids the worst of OO hell.</p>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </mat-grid-tile>-->
+
+<!--  <mat-grid-tile colspan="1" rowspan="4">-->
+<!--    <mat-card>-->
+<!--      <mat-card-title>Angular</mat-card-title>-->
+<!--      <img mat-card-sm-image src="assets/images/angular-icon.svg">-->
+<!--      <mat-card-subtitle>Because of typescript.</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <h4>React looks great but Typescript has types.</h4>-->
+<!--        <p> Angular has been a really welcoming, easy experience and typescript feels a bit more like what I'm used to with kotlin (i.e. closer to strong static typing than vanilla JS). This site is made in Angular 9.-->
+<!--        </p>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+
+<!--  </mat-grid-tile>-->
+
+
+<!--  <mat-grid-tile colspan="1" rowspan="2">-->
+<!--    <mat-card>-->
+<!--      <mat-card-title>-->
+<!--        <button mat-raised-button color="primary"  (click)="onClickCV()">CV.</button>-->
+<!--      </mat-card-title>-->
+<!--      <mat-card-content>-->
+<!--        Here's a more traditional CV for me.-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </mat-grid-tile>-->
+<!--</mat-grid-list>-->
 
 
 <!--<div class="mat-elevation-z8">-->

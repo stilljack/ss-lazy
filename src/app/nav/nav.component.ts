@@ -20,5 +20,5 @@ export class NavComponent {
 
   constructor(private breakpointObserver: BreakpointObserver) {}
 
-  title = 'ss-lazy-eval';
+  title = 'Seymour Software -- Will code for food';
 }

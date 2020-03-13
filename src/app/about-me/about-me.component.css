@@ -8,3 +8,29 @@
 #android{
   fill: red;
 }
+#flexcontainer {
+  width: fit-content;
+  height: fit-content;
+  border: 3px solid black;
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  padding: 5px;
+}
+
+.flexitem {
+  width: fit-content;
+  height: fit-content;
+  margin: 2px;
+}
+
+.two {
+  height: fit-content;
+    width: 35vmax;
+  order: 3;
+}
+
+.three {
+  order: 5;
+}
+
+.five { order: 4; }
