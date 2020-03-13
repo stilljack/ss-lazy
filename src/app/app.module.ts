@@ -27,6 +27,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { CodeZooComponent } from './code-zoo/code-zoo.component';
 import {CanvasrxComponent} from './canvas_experiments/canvas-ts-xp1/canvasrx.component';
+import {InlineSVGModule} from "ng-inline-svg";
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import {CanvasrxComponent} from './canvas_experiments/canvas-ts-xp1/canvasrx.com
     RouterModule,
     AppRoutingModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    InlineSVGModule
   ],
   providers: [],
   bootstrap: [AppComponent]
