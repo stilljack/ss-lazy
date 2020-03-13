@@ -23,13 +23,16 @@
               "src/favicon.ico",
               "src/assets",
               "src/assets/images",
-              "src/assets/favicos"
+              "src/assets/favicos",
+              "src/assets/json"
             ],
             "styles": [
               "src/custom-theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/svg.js/dist/svg.js"
+            ]
           },
           "configurations": {
             "production": {
