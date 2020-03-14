@@ -14,8 +14,7 @@ const colorsLength: number = colors.length;
 
 
 export class BoardToDeath {
-  constructor() {
-  }
+
 
   public gradientDescent(draw, element) {
     let gradient = draw.gradient('linear', (stop) => {
