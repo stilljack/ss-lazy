@@ -29,6 +29,9 @@ import { CodeZooComponent } from './code-zoo/code-zoo.component';
 import {CanvasrxComponent} from './canvas_experiments/canvas-ts-xp1/canvasrx.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Canvas2Component } from './canvas_experiments/canvas2/canvas2.component';
+import { BaseCanvasExperimentsComponent } from './canvas_experiments/base-canvas-experiments/base-canvas-experiments.component';
+import { CanvasInheritanceComponent } from './canvas_experiments/canvas-inheritance/canvas-inheritance.component';
+
 
 @NgModule({
   declarations: [
@@ -40,14 +43,15 @@ import { Canvas2Component } from './canvas_experiments/canvas2/canvas2.component
     AboutMeComponent,
     CodeZooComponent,
     CanvasrxComponent,
-    Canvas2Component
+    Canvas2Component,
+    BaseCanvasExperimentsComponent,
+    CanvasInheritanceComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatTableModule,
     MatButtonToggleModule,
-    MatButtonModule,
     MatExpansionModule,
     MatGridListModule,
     MatCardModule,
@@ -61,7 +65,6 @@ import { Canvas2Component } from './canvas_experiments/canvas2/canvas2.component
     AppRoutingModule,
     MatPaginatorModule,
     MatSortModule,
-    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

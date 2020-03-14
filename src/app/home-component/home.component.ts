@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Blogs} from "Global";
+
 import * as data from '../sample.json';
+import {Blogs} from "../global_types";
+
+
 
 @Component({
   selector: 'app-home-component',

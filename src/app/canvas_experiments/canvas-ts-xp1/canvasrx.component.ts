@@ -10,17 +10,17 @@ import {NONE_TYPE} from "@angular/compiler";
 export class CanvasrxComponent implements AfterViewInit, OnInit {
 
   @ViewChild('canvas') public canvas: ElementRef;
-  @Input() public width = parent.innerWidth ;
-  @Input() public height = parent.innerHeight;
-  private ourArray: Array<Balls> = [];
-  private cx: CanvasRenderingContext2D;
+  @Input() public width = Math.ceil(parent.innerWidth / 1.153) ;
+  @Input() public height = Math.ceil(parent.innerHeight / 1.15);
   resizeObservable$: Observable<Event>;
   resizeSubscription$: Subscription;
+  private ourArray: Array<Balls> = [];
+  private cx: CanvasRenderingContext2D;
   public ngAfterViewInit() {
     let canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.cx = canvasEl.getContext('2d');
-    canvasEl.width = Math.ceil(parent.outerWidth / 1.2);
-    canvasEl.height = parent.innerHeight / 1.2;
+    canvasEl.width = Math.ceil(parent.innerWidth / 1.153) ;
+    canvasEl.height = Math.ceil(parent.innerHeight / 1.1);
     this.width = canvasEl.width;
     this.height =  canvasEl.height;
     console.log(canvasEl.width + 'canvas width');

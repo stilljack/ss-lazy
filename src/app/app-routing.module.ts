@@ -6,9 +6,13 @@ import {FourofourComponent} from "./fourofour/fourofour.component";
 import {HomeComponent} from "./home-component/home.component";
 import {AboutMeComponent} from "./about-me/about-me.component";
 import {CodeZooComponent} from "./code-zoo/code-zoo.component";
+import {Canvas2Component} from "./canvas_experiments/canvas2/canvas2.component";
+import {CanvasInheritanceComponent} from "./canvas_experiments/canvas-inheritance/canvas-inheritance.component";
 
 const routes: Routes = [
   { path: 'canvas1', component: CanvasTsXp1Component },
+  { path: 'canvas2', component: Canvas2Component },
+  { path: 'canvas_inheritance', component: CanvasInheritanceComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'about_me', component: AboutMeComponent},
