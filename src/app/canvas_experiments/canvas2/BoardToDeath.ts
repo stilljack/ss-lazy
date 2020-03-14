@@ -11,6 +11,7 @@ interface Colors {
   color: string;
   default: Array<string>;
 }
+// @ts-ignore
 const colors: Array<Colors> = (data as Array<Colors>).default;
 const colorsLength = colors.length;
 console.log(colorsLength)
@@ -133,12 +134,15 @@ export class BoardToDeath {
   }
 
   public onClickTwo() {
+    // @ts-ignore
     this.boardRectSet.fill(getColor())
+
     //this.boardRectSet.animate().move(100, 150);
   }
 
   public onClickThree() {
 
+    // @ts-ignore
     this.boardRectSet.animate()
       .move(200, 100);
   }
