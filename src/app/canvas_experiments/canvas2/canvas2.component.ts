@@ -17,9 +17,10 @@ export class Canvas2Component
   extends BaseCanvasExperimentsComponent
   implements OnInit {
 
+
 btd = new BoardToDeath()
-  @Input() public width = Math.ceil(parent.innerWidth / 1.153) ;
-  @Input() public height = Math.ceil(parent.innerHeight / 1.15);
+  @Input() public width = Math.ceil(parent.innerWidth / 1.7) ;
+  @Input() public height = Math.ceil(parent.innerHeight / 1.7);
   constructor(public router: Router) {
     super(router);
   }
