@@ -34,7 +34,7 @@ export function getColor() {
   let color =(number)=>{return Math.floor(number)}
   return colors[ color(Math.random() * colorsLength)]
 }
-export function n(min, max) { // min and max included
+export function randomIntRange(min, max) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 // /*~ If your module exports types or values, write them as usual */

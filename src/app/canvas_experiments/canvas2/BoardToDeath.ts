@@ -1,5 +1,5 @@
 import svgjs, {Rect} from "svg.js";
-import {getColor} from "../../global_namespace";
+import {getColor, randomIntRange} from "../../global_namespace";
 declare const SVG: any;
 
 
@@ -28,6 +28,10 @@ export class BoardToDeath {
   board;
   pattern;
   boardRectSet:svgjs.Set;
+  subWidth;
+  subHeight;
+  penguin:svgjs.Image;
+  penguinOffset:XYPair;
   boardDictionary: { [key: string]: svgjs.Rect } = {};
 
 
@@ -46,17 +50,16 @@ export class BoardToDeath {
     this.zoom = this.viewBox.zoom;
 
 
-
     this.board = this.draw.rect(width, height)
-      .fill('#f66')
+      .fill('#000')
       .animate()
       .move(0, 0);
 
 
     this.boardRectSet = this.draw.set()
 
-    let subWidth = (width) / 10
-    let subHeight = (height) / 10
+    this.subWidth = (width) / 10
+    this.subHeight = (height) / 10
 
     let color1 =getColor()
     let color2 =getColor()
@@ -73,26 +76,37 @@ export class BoardToDeath {
 
 
         this.boardDictionary[tempId] =
-          this.draw.rect(subWidth, subHeight)
-        this.boardDictionary[tempId].move(subWidth * x, subHeight * y)
+          this.draw.rect(this.subWidth, this.subHeight)
+        this.boardDictionary[tempId].move(this.subWidth * x, this.subHeight * y)
         if ( x % 2 == y % 2){
-          console.log(alternate)
           this.boardDictionary[tempId].fill(color1)
-          alternate = 1
         }
         else{
-          console.log(alternate)
-          alternate=0
           this.boardDictionary[tempId].fill(color2)
         }
 // create a set and add the elements
-
         this.boardRectSet.add(this.boardDictionary[tempId])
         console.log(`boardRectSet length = ${this.boardRectSet.length().toString()} `)
       }
     }
 
+    //begin penguin init
+    console.log(`subheight = ${this.subHeight} width = ${this.subWidth}`)
+    this.penguin = this.draw.image('../assets/penguin-svgrepo-com.svg',this.subHeight,this.subWidth)
+        this.penguinOffset= new XYPair(this.subWidth/9,-this.subHeight/10)
+    this.penguin.move(this.penguinOffset.x, this.penguinOffset.y)
+    // this.penguin.move(this.penguinOffset.x+this.subWidth+this.subWidth+this.subWidth,this.penguinOffset.y+this.subHeight+this.subHeight)
+
   }
+    public movePenguin(penguin:svgjs.Image,moveTo:svgjs.Rect){
+  //kind of hate that we're using a string here but honestly, dont have a better idea
+    let movetoX = moveTo.x()
+    let movetoY = moveTo.y()
+    penguin.move(movetoX+this.penguinOffset.x, movetoY+this.penguinOffset.y)
+  }
+
+
+
 
   public onClickOne() {
     console.log("one called");
@@ -107,6 +121,11 @@ export class BoardToDeath {
   }
 
   public onClickTwo() {
+    let x=randomIntRange(0,9)
+    let y=randomIntRange(0,9)
+    let moveToSquare=this.boardDictionary[`${x}-${y}`]
+    console.log(moveToSquare.id())
+    this.movePenguin(this.penguin,moveToSquare)
     // @ts-ignore
     //this.boardRectSet.fill(getColor())
     // for (let key in this.boardDictionary) {
