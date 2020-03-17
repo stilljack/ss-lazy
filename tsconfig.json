@@ -1,8 +1,9 @@
 {
 
-
+"noImplicitAny ": false,
   "compileOnSave": false,
   "compilerOptions": {
+
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "./",
@@ -25,6 +26,6 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": false
   }
 }
