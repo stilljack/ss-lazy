@@ -19,8 +19,8 @@ export class Canvas2Component
 
 
 btd = new BoardToDeath()
-  @Input() public width = Math.ceil(parent.innerWidth /1.1 ) ;
-  @Input() public height = Math.ceil(parent.innerHeight /1.1 );
+  @Input() public width = Math.ceil(parent.innerWidth /1.05 ) ;
+  @Input() public height = Math.ceil(parent.innerHeight /1.05 );
   constructor(public router: Router) {
     super(router);
   }

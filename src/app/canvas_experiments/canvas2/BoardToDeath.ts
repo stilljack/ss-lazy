@@ -44,10 +44,21 @@ export class BoardToDeath {
   }
 
   public initCanvas(id: string, height: number, width: number) {
+    console.log(height)
+    console.log(width)
+    if (height<width){
+      width = height
+    }
+    else{
+      height = width
+    }
+    console.log(height)
+    console.log(width)
     this.draw = SVG('canvas').size(width, height);
     this.draw.viewbox({x: 0, y: 0, width, height});
     this.viewBox = this.draw.viewbox();
     this.zoom = this.viewBox.zoom;
+
 
 
     this.board = this.draw.rect(width, height)
@@ -93,19 +104,21 @@ export class BoardToDeath {
     //begin penguin init
     console.log(`subheight = ${this.subHeight} width = ${this.subWidth}`)
     this.penguin = this.draw.image('../assets/penguin-svgrepo-com.svg',this.subHeight,this.subWidth)
-        this.penguinOffset= new XYPair(this.subWidth/9,-this.subHeight/10)
+    this.penguinOffset= new XYPair(0,0)
     this.penguin.move(this.penguinOffset.x, this.penguinOffset.y)
     // this.penguin.move(this.penguinOffset.x+this.subWidth+this.subWidth+this.subWidth,this.penguinOffset.y+this.subHeight+this.subHeight)
 
   }
-    public movePenguin(penguin:svgjs.Image,moveTo:svgjs.Rect){
-  //kind of hate that we're using a string here but honestly, dont have a better idea
+  public movePenguin(penguin:svgjs.Image,moveTo:svgjs.Rect){
+    //kind of hate that we're using a string here but honestly, dont have a better idea
     let movetoX = moveTo.x()
     let movetoY = moveTo.y()
     penguin.move(movetoX+this.penguinOffset.x, movetoY+this.penguinOffset.y)
   }
 
+public makeBlock(target:svgjs.Rect){
 
+}
 
 
   public onClickOne() {
