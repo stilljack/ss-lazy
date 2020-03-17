@@ -2,29 +2,22 @@ import * as data from './colors.json';
 import {zip} from "rxjs";
 import {Router} from "@angular/router";
 import {Component} from "@angular/core";
-import svgjs from "svg.js";
+import svgjs, {Rect} from "svg.js";
 import {element} from "protractor";
 import {randomFill} from "crypto";
+import Global = WebAssembly.Global;
+import {getColor, randomIntFromInterval} from "../../global_namespace";
+import {symlink} from "fs";
+import {installTempPackage} from "@angular/cli/tasks/install-package";
+import {keyframes} from "@angular/animations";
+import enumerate = Reflect.enumerate;
+import {withIdentifier} from "codelyzer/util/astQuery";
+import {scheduleMacroTaskWithCurrentZone} from "zone.js/lib/common/utils";
 declare const SVG: any;
 
-interface Colors {
-  color: string;
-  default: Array<string>;
-}
-// @ts-ignore
-const colors: Array<Colors> = (data as Array<Colors>).default;
-const colorsLength = colors.length;
-console.log(colorsLength)
-console.log(colors[0].color)
-function getColor() {
-  let matcherResult =Math.floor(Math.random()*colorsLength)
 
-  let res= colors[matcherResult].color
+//lets get this osmewhe
 
-  console.log(`matcher = ${matcherResult} res=${res}`)
-  return res
-
-}
 class XYPair{
   x:number
   y:number
@@ -33,15 +26,20 @@ class XYPair{
     this.y = y
   }
 }
-type DictionaryItem = [string, svgjs.Rect];
-let custDictionary: DictionaryItem[];
-custDictionary = [];
-interface BoadRectDictionary<K,V>
-{
-  0: string,
-  1: svgjs.Rect
-};
 
+// type DictionaryItem = [string, svgjs.Rect];
+// interface BoadRectDictionary< string,V>
+// {
+//   key: string,
+//   value: svgjs.Rect
+// };
+//   rectDictionary: BoadRectDictionary<string, svgjs.Rect>[];
+//   custDictionary: DictionaryItem[] = []
+export class RectDict<String,Rect>
+{
+  key:String
+value:Rect
+}
 export class BoardToDeath {
   constructor() {
   }
@@ -52,8 +50,7 @@ export class BoardToDeath {
   board;
   pattern;
   boardRectSet:svgjs.Set;
-  rectDictionary: BoadRectDictionary<string, svgjs.Rect>[];
-
+  boardDictionary: { [key: string]: svgjs.Rect } = {};
   public gradientDescent(draw, element) {
     let gradient = draw.gradient('linear', (stop) => {
       stop.at(0, '#333')
@@ -101,16 +98,23 @@ export class BoardToDeath {
         //let color = `#${x % 9}${x * y % 9}${(x + y) % 9}`
         let color =getColor()
         console.log(color)
-        custDictionary[tempId] =this.draw.rect(subWidth, subHeight)
-        console.log(custDictionary[tempId])
+        // let item:string = this.draw.rect(subWidth, subHeight)
+        //   .id().toString()
+        // console.log(`id of rect = ${item}`)
+
+        this.boardDictionary[tempId] =this.draw.rect(subWidth, subHeight)
+        console.log(`id of rect = ${this.boardDictionary[tempId]}`)
+        console.log(`we only need to keep our eyes open ${this.boardDictionary[tempId]}`)
+
+        console.log((this.boardDictionary)[tempId].toString)
         console.log(`tempRect id = ${this.board}`)
-        custDictionary[tempId].move(subWidth * x, subHeight * y)
-        custDictionary[tempId].fill(getColor())
+        this.boardDictionary[tempId].move(subWidth * x, subHeight * y)
+        this.boardDictionary[tempId].fill(getColor())
 // create a set and add the elements
 
-        this.boardRectSet.add(custDictionary[tempId])
+        this.boardRectSet.add(this.boardDictionary[tempId])
         console.log(`boardRectSet length = ${this.boardRectSet.length()} `)
-
+        console.log(`custDictionary length = ${this.boardDictionary.toString()} `)
       }
     }
 
@@ -119,29 +123,39 @@ export class BoardToDeath {
   public onClickOne() {
     console.log("one called");
     // @ts-ignore
-    //this.boardRectSet.animate().move(-300, -200);
-    this.boardRectSet.each(
-      (index,members)=> {
-        console.log(this.boardRectSet.get(index))
-        this.boardRectSet.get(index).attr({fill:getColor()})
-      }
-    )
-    // for (let boardRectSetKey in this.boardRectSet) {
-    //
-    //   this.boardRectSet[boardRectSetKey].fill(getColor())
-    //
-    // }
+    console.log(this.boardDictionary['0-2'].fill(getColor()))
+    for (let custDictionaryKey in this.boardDictionary) {
+      this.boardDictionary[custDictionaryKey].fill(getColor())
+      console.log(`key equaly ${custDictionaryKey} ${this.boardDictionary[custDictionaryKey]
+        .matrix([1,2,3,4,5,6])}. ${this.boardDictionary[custDictionaryKey].length}`)
+    }
+
   }
 
   public onClickTwo() {
     // @ts-ignore
-    this.boardRectSet.fill(getColor())
+    //this.boardRectSet.fill(getColor())
+   for (let key in this.boardDictionary)
+   {
+     let currentRect= this.boardDictionary[key]
+     let currentX = currentRect.x()
+     let currentY = currentRect.y()
+     let c = currentRect.animate()
+     //console.log(`rect equals ${currentRect.id()} x ${currentX} y ${currentY}`)
+     console.log(`key equals ${key} ${currentRect}`)
+      // @ts-ignore
+     currentRect.fill(getColor())
+     currentRect
+       .animate()
+       .move( currentX+randomIntFromInterval(-20,30),
+         currentY+randomIntFromInterval(-20,30))
 
+          }
     //this.boardRectSet.animate().move(100, 150);
   }
 
   public onClickThree() {
-
+  alert(this.draw.children())
     // @ts-ignore
     this.boardRectSet.animate()
       .move(200, 100);

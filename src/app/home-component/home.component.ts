@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import * as data from '../sample.json';
-import {Blogs} from "../global_types";
+import {Blogs} from "../global_namespace";
 
 
 
