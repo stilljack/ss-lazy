@@ -1,6 +1,9 @@
 import svgjs, {Rect} from "svg.js";
 import {getColor, randomIntRange} from "../../global_namespace";
 declare const SVG: any;
+import * as colorLib from 'color';
+import {kebabToCamelCase} from "codelyzer/util/utils";
+import {inspect} from "util";
 
 
 
@@ -32,6 +35,8 @@ export class BoardToDeath {
   subHeight;
   penguin:svgjs.Image;
   penguinOffset:XYPair;
+  color1;
+  color2;
   boardDictionary: { [key: string]: svgjs.Rect } = {};
 
 
@@ -72,10 +77,10 @@ export class BoardToDeath {
     this.subWidth = (width) / 10
     this.subHeight = (height) / 10
 
-    let color1 =getColor()
-    let color2 =getColor()
-    console.log(color1)
-    console.log(color2)
+    this.color1 =getColor()
+    this.color2 =getColor()
+    console.log(this.color1)
+    console.log(this.color2)
     let alternate=0
     //create the actual board
     for (let x = 0; x < 10; x++ ) {
@@ -90,10 +95,10 @@ export class BoardToDeath {
           this.draw.rect(this.subWidth, this.subHeight)
         this.boardDictionary[tempId].move(this.subWidth * x, this.subHeight * y)
         if ( x % 2 == y % 2){
-          this.boardDictionary[tempId].fill(color1)
+          this.boardDictionary[tempId].fill(this.color1)
         }
         else{
-          this.boardDictionary[tempId].fill(color2)
+          this.boardDictionary[tempId].fill(this.color2)
         }
 // create a set and add the elements
         this.boardRectSet.add(this.boardDictionary[tempId])
@@ -113,12 +118,28 @@ export class BoardToDeath {
     //kind of hate that we're using a string here but honestly, dont have a better idea
     let movetoX = moveTo.x()
     let movetoY = moveTo.y()
-    penguin.move(movetoX+this.penguinOffset.x, movetoY+this.penguinOffset.y)
+    penguin
+      .animate()
+      .move(movetoX+this.penguinOffset.x, movetoY+this.penguinOffset.y)
+
   }
 
-public makeBlock(target:svgjs.Rect){
-
-}
+  public makeBlock(target:svgjs.Rect){
+    console.log(`${this.color1.color} and ${this.color2.color}`)
+    let colorTrans1= colorLib.rgb().hex(this.color1.color).negate()
+    let colorTrans2 = colorLib.rgb().hex(this.color2.color).negate()
+    console.log(colorTrans1)
+    let radial = this.draw.gradient('radial',
+      (stop) => {
+	  stop.at(0, colorTrans1.toString() )
+    stop.at(1, colorTrans2.toString())
+  })
+    target.fill(radial)
+    //oh yeah this... this is fucked, i hate typescript so much.
+    target.data( 'isBlocked', { value: true })
+    let getBestEffortCoverageReturnType =target.data('isBlocked')
+    console.log(getBestEffortCoverageReturnType.value)
+  }
 
 
   public onClickOne() {
@@ -134,9 +155,11 @@ public makeBlock(target:svgjs.Rect){
   }
 
   public onClickTwo() {
+
     let x=randomIntRange(0,9)
     let y=randomIntRange(0,9)
     let moveToSquare=this.boardDictionary[`${x}-${y}`]
+    this.makeBlock(moveToSquare)
     console.log(moveToSquare.id())
     this.movePenguin(this.penguin,moveToSquare)
     // @ts-ignore
