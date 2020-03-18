@@ -4,6 +4,9 @@ declare const SVG: any;
 import * as colorLib from 'color';
 import {kebabToCamelCase} from "codelyzer/util/utils";
 import {inspect} from "util";
+import {requiresInlineTypeCtor} from "@angular/compiler-cli/src/ngtsc/typecheck/src/type_constructor";
+import {tsCastToAny} from "@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util";
+import {style} from "@angular/animations";
 
 
 
@@ -35,6 +38,7 @@ export class BoardToDeath {
   subHeight;
   penguin:svgjs.Image;
   penguinOffset:XYPair;
+  goal:svgjs.Element;
   color1;
   color2;
   boardDictionary: { [key: string]: svgjs.Rect } = {};
@@ -77,34 +81,75 @@ export class BoardToDeath {
     this.subWidth = (width) / 10
     this.subHeight = (height) / 10
 
-    this.color1 =getColor()
-    this.color2 =getColor()
+    this.color1 =getColor().color
+    this.color2 =getColor().color
     console.log(this.color1)
     console.log(this.color2)
-    let alternate=0
+
     //create the actual board
     for (let x = 0; x < 10; x++ ) {
       for (let y = 0; y <10; y++) {
         // create some elements
-        let tempId = `${x}-${y}`
-        console.log(tempId)
+        let newRectId = `${x}-${y}`
+        console.log(newRectId)
+
+        let newRect =
+          this.boardDictionary[newRectId] =
+            this.draw.rect(this.subWidth, this.subHeight)
+              .move(this.subWidth * x, this.subHeight * y)
 
 
-
-        this.boardDictionary[tempId] =
-          this.draw.rect(this.subWidth, this.subHeight)
-        this.boardDictionary[tempId].move(this.subWidth * x, this.subHeight * y)
         if ( x % 2 == y % 2){
-          this.boardDictionary[tempId].fill(this.color1)
+          newRect.fill(this.color1)
         }
         else{
-          this.boardDictionary[tempId].fill(this.color2)
+          newRect.fill(this.color2)
         }
-// create a set and add the elements
-        this.boardRectSet.add(this.boardDictionary[tempId])
+
+        //set on click event for board tiles to onClickBox with context of itself
+        let colorTrans1= colorLib.rgb().hex(getColor().color).negate()
+        let colorTrans2 = colorLib.rgb().hex(getColor().color).negate()
+        let radial =this.draw.gradient('radial',
+          (stop) => {
+            stop.at(0, colorTrans1.toString() )
+            stop.at(1, colorTrans2.toString()),
+              stop.at(2,"#000")
+          })
+        newRect.data('radial',radial,true)
+        console.log(newRect.data('radial'))
+        newRect.on('click',
+          this.onClickBox)
+
+// add new rect to set
+        this.boardRectSet.add(this.boardDictionary[newRectId])
         console.log(`boardRectSet length = ${this.boardRectSet.length().toString()} `)
       }
     }
+
+    //set up goal
+    //there's better ways to do this animation, and id love to come back to it but this is fine and this project is getting out of scope.
+    //know I regret this code although I thought the final call back structure was cute, and almost... chroreographic.
+    this.setUpGoal(
+      this.goal =this.boardRectSet.get(randomIntRange(0,this.boardRectSet.length()))
+    )
+    let xyFinal=new XYPair(this.goal.x(),this.goal.y())
+    console.log(`xyfinal =x ${xyFinal.x}y ${xyFinal.y} goal x y = ${this.goal.x()} ${this.goal.y()}`)
+
+   this.goal.animate(300).x(
+      this.goal.x()+50
+    )
+    this.goal.animate(250).x(
+      this.goal.x()-50
+    )
+    this.goal.animate(200).move(xyFinal.x,xyFinal.y)
+
+       this.goal.animate(150).x(
+      this.goal.x()+30
+    )
+    this.goal.animate(120).x(
+      this.goal.x()-30
+    )
+    this.goal.animate(100).move(xyFinal.x,xyFinal.y)
 
     //begin penguin init
     console.log(`subheight = ${this.subHeight} width = ${this.subWidth}`)
@@ -113,9 +158,60 @@ export class BoardToDeath {
     this.penguin.move(this.penguinOffset.x, this.penguinOffset.y)
     // this.penguin.move(this.penguinOffset.x+this.subWidth+this.subWidth+this.subWidth,this.penguinOffset.y+this.subHeight+this.subHeight)
 
+    //wait for user input
+  }
+
+
+
+
+  public setUpGoal(rect:svgjs.Element) {
+    let x =rect.x()
+    let y = rect.y()
+    // console.log(`x=${x} y = ${y}`)
+    let change= 5
+    let modx = this.subHeight/change
+    let mody = this.subWidth/(change-1)
+    console.log(`x=${x} modx = ${modx} y = ${y} mody=${mody}`)
+    x += modx
+    y += mody
+
+    let color =rect.attr('fill')
+    let finalColor= colorLib.rgb().hex(color).negate().toString()
+    console.log(finalColor)
+    let text1 =
+      this.draw
+        .text('GOAL!')
+        .font({
+          family:   'Monospace'
+          , size:     24
+          , anchor:   'left'
+          , weight: 'bold'
+          , style: 'normal'
+        })
+        .fill(finalColor)
+        .animate(200).move(x , y)
+
+
+
+    console.log(`x=${x} y = ${y}`)
+    // text.build(true)  // enables build mode
+    //
+    // var tspan = text.tspan('something pink in the middle ')
+    // text.plain('and again boring at the end.')
+    //
+    // text.build(false) // disables build mode
+
+
+
+  }
+
+
+  public penguinTurn() {
+
+
+
   }
   public movePenguin(penguin:svgjs.Image,moveTo:svgjs.Rect){
-    //kind of hate that we're using a string here but honestly, dont have a better idea
     let movetoX = moveTo.x()
     let movetoY = moveTo.y()
     penguin
@@ -125,22 +221,27 @@ export class BoardToDeath {
   }
 
   public makeBlock(target:svgjs.Rect){
-    console.log(`${this.color1.color} and ${this.color2.color}`)
-    let colorTrans1= colorLib.rgb().hex(this.color1.color).negate()
-    let colorTrans2 = colorLib.rgb().hex(this.color2.color).negate()
-    console.log(colorTrans1)
-    let radial = this.draw.gradient('radial',
-      (stop) => {
-	  stop.at(0, colorTrans1.toString() )
-    stop.at(1, colorTrans2.toString())
-  })
-    target.fill(radial)
-    //oh yeah this... this is fucked, i hate typescript so much.
-    target.data( 'isBlocked', { value: true })
-    let getBestEffortCoverageReturnType =target.data('isBlocked')
-    console.log(getBestEffortCoverageReturnType.value)
+
+
   }
 
+  public onClickBox() {
+    // @ts-ignore
+    let workRect:svgjs.Rect =this
+    if (workRect.data('isBlocked')){
+      console.log("blocked")
+    }
+    else{
+      console.log(workRect.data("radial"))
+      workRect.fill(workRect.data('radial'))
+
+
+      //oh yeah this... this is fucked, i hate typescript so much.
+      workRect.data( 'isBlocked', { value: true })
+      let applyBlockeddata =workRect.data('isBlocked')
+      console.log(applyBlockeddata.value)
+    }
+  }
 
   public onClickOne() {
     console.log("one called");
@@ -159,7 +260,6 @@ export class BoardToDeath {
     let x=randomIntRange(0,9)
     let y=randomIntRange(0,9)
     let moveToSquare=this.boardDictionary[`${x}-${y}`]
-    this.makeBlock(moveToSquare)
     console.log(moveToSquare.id())
     this.movePenguin(this.penguin,moveToSquare)
     // @ts-ignore
