@@ -7,6 +7,9 @@ import {inspect} from "util";
 import {requiresInlineTypeCtor} from "@angular/compiler-cli/src/ngtsc/typecheck/src/type_constructor";
 import {tsCastToAny} from "@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util";
 import {style} from "@angular/animations";
+import {type} from "os";
+import {arrayify} from "tslint/lib/utils";
+import {Direct} from "protractor/built/driverProviders";
 
 
 
@@ -19,6 +22,17 @@ class XYPair{
   }
 }
 
+enum Direction {
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+enum Traversable {
+  OK = 1,
+  BLOCKED = 0,
+  OUT_OF_BOUNDS = -1
+}
 export class RectDict<String,Rect>
 {
   key:String
@@ -32,6 +46,7 @@ export class BoardToDeath {
   viewBox: svgjs.ViewBox;
   zoom = svgjs.ViewBox.zoom;
   board;
+  boardSize;
   pattern;
   boardRectSet:svgjs.Set;
   subWidth;
@@ -39,6 +54,7 @@ export class BoardToDeath {
   penguin:svgjs.Image;
   penguinOffset:XYPair;
   goal:svgjs.Element;
+  penguinDirection: Array<Direction>  =[Direction.Up,Direction.Down,Direction.Left,Direction.Right];
   color1;
   color2;
   boardDictionary: { [key: string]: svgjs.Rect } = {};
@@ -53,6 +69,7 @@ export class BoardToDeath {
   }
 
   public initCanvas(id: string, height: number, width: number) {
+    this.boardSize=10
     console.log(height)
     console.log(width)
     if (height<width){
@@ -78,8 +95,8 @@ export class BoardToDeath {
 
     this.boardRectSet = this.draw.set()
 
-    this.subWidth = (width) / 10
-    this.subHeight = (height) / 10
+    this.subWidth = (width) / this.boardSize
+    this.subHeight = (height) / this.boardSize
 
     this.color1 =getColor().color
     this.color2 =getColor().color
@@ -87,8 +104,8 @@ export class BoardToDeath {
     console.log(this.color2)
 
     //create the actual board
-    for (let x = 0; x < 10; x++ ) {
-      for (let y = 0; y <10; y++) {
+    for (let x = 0; x < this.boardSize; x++ ) {
+      for (let y = 0; y <this.boardSize; y++) {
         // create some elements
         let newRectId = `${x}-${y}`
         console.log(newRectId)
@@ -115,10 +132,15 @@ export class BoardToDeath {
             stop.at(1, colorTrans2.toString()),
               stop.at(2,"#000")
           })
+        let penguinFunction = this.penguinTurn
         newRect.data('radial',radial,true)
+        newRect.data('rectId',newRectId,true)
+        newRect.data('penguinTurn', penguinFunction,true)
         console.log(newRect.data('radial'))
         newRect.on('click',
           this.onClickBox)
+        newRect.on('click',
+          this.penguinTurn,this)
 
 // add new rect to set
         this.boardRectSet.add(this.boardDictionary[newRectId])
@@ -130,12 +152,12 @@ export class BoardToDeath {
     //there's better ways to do this animation, and id love to come back to it but this is fine and this project is getting out of scope.
     //know I regret this code although I thought the final call back structure was cute, and almost... chroreographic.
     this.setUpGoal(
-      this.goal =this.boardRectSet.get(randomIntRange(0,this.boardRectSet.length()))
+      this.goal =this.boardRectSet.get(randomIntRange(25,this.boardRectSet.length()))
     )
     let xyFinal=new XYPair(this.goal.x(),this.goal.y())
     console.log(`xyfinal =x ${xyFinal.x}y ${xyFinal.y} goal x y = ${this.goal.x()} ${this.goal.y()}`)
 
-   this.goal.animate(300).x(
+    this.goal.animate(300).x(
       this.goal.x()+50
     )
     this.goal.animate(250).x(
@@ -143,7 +165,7 @@ export class BoardToDeath {
     )
     this.goal.animate(200).move(xyFinal.x,xyFinal.y)
 
-       this.goal.animate(150).x(
+    this.goal.animate(150).x(
       this.goal.x()+30
     )
     this.goal.animate(120).x(
@@ -152,10 +174,13 @@ export class BoardToDeath {
     this.goal.animate(100).move(xyFinal.x,xyFinal.y)
 
     //begin penguin init
+
     console.log(`subheight = ${this.subHeight} width = ${this.subWidth}`)
     this.penguin = this.draw.image('../assets/penguin-svgrepo-com.svg',this.subHeight,this.subWidth)
     this.penguinOffset= new XYPair(0,0)
     this.penguin.move(this.penguinOffset.x, this.penguinOffset.y)
+
+    this.penguin.data('currentRect','0-0',true)
     // this.penguin.move(this.penguinOffset.x+this.subWidth+this.subWidth+this.subWidth,this.penguinOffset.y+this.subHeight+this.subHeight)
 
     //wait for user input
@@ -205,9 +230,133 @@ export class BoardToDeath {
 
   }
 
+  public toString() {
+    return "Board as F tostring"
+  }
+
+
+
+  public penguinTurn2(){
+    let penguinThingInIteself =this.penguin
+    let penguinPosition = this.penguin.data('currentRect')
+    let goalRect = this.goal
+    let penguinBoardX:number = penguinPosition[0]
+    let penguinBoardY:number= penguinPosition[2]
+    let penguinLeft
+    let penguinRight
+    let penguinUp
+    let penguinDown
+    console.log(`pboard x = ${penguinBoardX} right plus one:`)
+    penguinBoardX++
+    console.log(`${penguinBoardX}-${penguinBoardY}---this is the one`)
+
+
+    if (penguinBoardX-1>=0) {penguinLeft = this.boardDictionary[`${penguinBoardX-=1}-${penguinBoardY}`]; console.log(`${penguinBoardX -1}-${penguinBoardY}`)} else {penguinLeft=null}
+    if (penguinBoardY-1>=0) {penguinUp = this.boardDictionary[`${penguinBoardX}-${penguinBoardY-=1}`]} else {penguinUp=null}
+    if (penguinBoardX+1<=this.boardSize) {penguinRight = this.boardDictionary[`${penguinBoardX+=1}-${penguinBoardY}`];console.log(`${penguinBoardX+=1}-${penguinBoardY}`)}else {penguinLeft=null}
+    if (penguinBoardY+1<=this.boardSize) {penguinDown = this.boardDictionary[`${penguinBoardX}-${penguinBoardY+=1}`]} else {penguinUp=null}
+    console.log(`left = ${penguinLeft} right = ${penguinRight} down = ${penguinDown} up = ${penguinUp}`)
+
+
+
+    console.log(`penguin directions 0 = ${this.penguinDirection[0]}`)
+    this.penguinDirection[0] =Direction.Right
+    console.log(`penguin directions 0 = ${this.penguinDirection[0]}`)
+    // find out where goal is
+    this.determineGoalDirection(penguinThingInIteself,goalRect)
+    //check where we can go
+// go left, right, up, down dues to where goal is
+//
+// check spaces
+//
+// if good space, go there
+// else go rando
+    this.penguinDirection.forEach((currentDir:Direction)=>
+    {
+
+    })
+
+
+  }
+  private isTargetBlocked(rect:svgjs.Element){
+    let isBlockedData = rect.data('isBlocked')
+    if (rect.data('isBlocked')){
+      console.log("blocked")
+      return true
+    }
+    else return false
+  }
+
+  public determineGoalDirection(penguinRect,goalRect) {
+       this.penguinDirection.forEach((dir,i)=>{
+        i++
+        console.log(`init penguin direct ${dir} ${i}`)
+      })
+
+    let addDirPopDirFn = (array:Array<Direction>,directionShift) =>{
+      array.unshift(directionShift)
+      array.pop()
+    }
+    let px = penguinRect.x()
+    let py = penguinRect.y()
+    let gx = goalRect.x()
+    let gy = goalRect.y()
+    let resultsArray: Array<Direction>= []
+    if (px > gx) {
+      //add left
+      addDirPopDirFn(this.penguinDirection,Direction.Left)
+      //   console.log(`penguin direction`)
+      if (py > gy) {
+        //add up
+        addDirPopDirFn(this.penguinDirection,Direction.Up)
+        console.log(`x:${px} more than ${gx} y:${py} more than ${gy}`)
+      } else {
+        //add down
+        addDirPopDirFn(this.penguinDirection,Direction.Down)
+        console.log(`x:${px} more than ${gx} y:${py} less than ${gy}`)
+      }
+    } else {
+      //add right
+      addDirPopDirFn(this.penguinDirection,Direction.Right)
+      if (py > gy) {
+        //add down
+        addDirPopDirFn(this.penguinDirection,Direction.Up)
+        console.log(`x:${px} less than ${gx} y:${py} more than ${gy}`)
+      } else {
+        //add up
+        addDirPopDirFn(this.penguinDirection,Direction.Down)
+        this.draw.circle(40).move(gx-px,  gy-py).fill("#000")
+      }
+    }
+       this.penguinDirection.forEach((dir,i)=>{
+        i++
+        console.log(` final penguin direct ${dir} ${i}`)
+      })
+  }
+
 
   public penguinTurn() {
-
+    this.penguinTurn2()
+    let penguinRect =this.penguin
+    let penguinPosition = this.penguin.data('currentRect')
+    let goalRect = this.goal
+    console.log(` penguinturn this is ${this.toString()} \n penguin positon = ${penguinPosition} type of pp = ${typeof (penguinPosition)}`)
+    console.log(penguinRect.data('currentRect'))
+    let attemptToUnderstand = "0-0"
+    let tempRect2 = this.boardDictionary[attemptToUnderstand]
+    console.log(`does it ATU equal PP? ${attemptToUnderstand==penguinPosition}`)
+    console.log(`penguin positon ${penguinPosition}`)
+    console.log(`temprect x=  tr2 = ${tempRect2.move(100,100)}`)
+    let tempRect = this.boardDictionary[penguinPosition]
+    console.log(`temprect x= ${tempRect.x()} tr2 = ${tempRect2.x()}`)
+    tempRect.animate(299).move(tempRect.x(),tempRect.y()+100,true)
+    //destructe
+    let endX= penguinRect.x()
+    let endY = penguinRect.y()
+    let px= penguinRect.x()
+    let py =penguinRect.y()
+    let gx= goalRect.x()
+    let gy = goalRect.y()
 
 
   }
@@ -220,10 +369,10 @@ export class BoardToDeath {
 
   }
 
-  public makeBlock(target:svgjs.Rect){
-
-
-  }
+  // public makeBlock(target:svgjs.Rect){
+  //
+  //
+  // }
 
   public onClickBox() {
     // @ts-ignore
@@ -241,6 +390,7 @@ export class BoardToDeath {
       let applyBlockeddata =workRect.data('isBlocked')
       console.log(applyBlockeddata.value)
     }
+
   }
 
   public onClickOne() {
